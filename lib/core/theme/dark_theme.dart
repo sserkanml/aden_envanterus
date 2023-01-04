@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+
+import 'itheme.dart';
+
+class DarkTheme implements Itheme {
+  @override
+  ThemeData theme = ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: const ColorScheme(
+        brightness: Brightness.dark,
+        primary: Color(0xFF9FC9FF),
+        onPrimary: Color(0xFF000000),
+        secondary: Color(0xFFFFB59D),
+        onSecondary: Color(0xFF000000),
+        error: Color(0xFFCF6679),
+        errorContainer: Color(0xFFB1384E),
+        inverseSurface: Color(0xFFFFFFFF),
+        inversePrimary: Color(0xFF4F6070),
+        onErrorContainer: Color(0xFFFFFFFF),
+        onInverseSurface: Color(0xFF000000),
+        onPrimaryContainer: Color(0xFFFFFFFF),
+        onSecondaryContainer:Color(0xFFFFFFFF) ,
+        onTertiary: Color(0xFF000000),
+        onSurfaceVariant:Color(0xFFFFFFFF) ,
+        onTertiaryContainer:Color(0xFFFFFFFF) ,
+        outline: Color(0xFFB3B3B3),
+        primaryContainer:Color(0xFF00325B) ,
+        secondaryContainer: Color(0xFF872100),
+        shadow: Color(0xFF000000),
+        surfaceTint:Color(0xFF9FC9FF) ,
+        surfaceVariant:Color(0xFF121212) ,
+        tertiary: Color(0xFF86D2E1),
+        tertiaryContainer: Color(0xFF004E59),
+
+        onError: Color(0xFF000000),
+        background: Color(0xFF121212),
+        onBackground: Color(0xFFFFFFFF),
+        surface: Color(0xFF121212),
+        onSurface: Color(0xFFFFFFFF)),
+    primaryColor: const Color(0xFF212121),
+    primaryColorDark: const Color(0xFF000000),
+    primaryColorLight: const Color(0xFF9E9E9E),
+    secondaryHeaderColor: const Color(0xFF616161),
+    toggleableActiveColor: const Color(0xFF64FFDA),
+    bottomAppBarColor: const Color(0xFF424242),
+    errorColor: const Color(0xFFD32F2F),
+    canvasColor: const Color(0xFF303030),
+    cardColor: const Color(0xFF424242),
+    scaffoldBackgroundColor: const Color(0xFF303030),
+    dialogBackgroundColor: const Color(0xFF424242),
+    indicatorColor: const Color(0xFF64FFDA),
+    disabledColor: const Color(0x62FFFFFF),
+    hoverColor: const Color(0x0AFFFFFF),
+    highlightColor: const Color(0x40CCCCCC),
+    focusColor: const Color(0x1FFFFFFF),
+    splashColor: const Color(0x40CCCCCC),
+    shadowColor: const Color(0xFF000000),
+    hintColor: const Color(0x99FFFFFF),
+    appBarTheme: const AppBarTheme(
+        elevation: 1,
+        backgroundColor: Color(0xFF424242),
+        centerTitle: false,
+        iconTheme: IconThemeData(color: Color(0XFF000000), size: 20)),
+    selectedRowColor: const Color(0xFFF5F5F5),
+    unselectedWidgetColor: const Color(0xB3FFFFFF),
+    dividerColor: const Color(0x1FFFFFFF),
+  );
+}
