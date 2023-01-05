@@ -1,23 +1,26 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'cache_enum.dart';
 import 'i_cache.dart';
 
 class CacheService extends IcacheService {
-  CacheService() : super();
+  final SharedPreferences pref;
+  CacheService(this.pref) : super();
 
   @override
   T? getData<T extends Object>(
       {required String key, required cacheEnum cacheType}) {
     switch (cacheType) {
       case cacheEnum.bool:
-        return super.pref.getBool(key) as T;
+        return pref.getBool(key) as T?;
 
       case cacheEnum.string:
-        return super.pref.getString(key) as T;
+        return pref.getString(key) as T?;
 
       case cacheEnum.int:
-        return super.pref.getInt(key) as T;
+        return pref.getInt(key) as T?;
       case cacheEnum.double:
-        return super.pref.getInt(key) as T;
+        return pref.getInt(key) as T?;
     }
   }
 
@@ -29,16 +32,16 @@ class CacheService extends IcacheService {
     switch (cacheType) {
       case cacheEnum.bool:
         bool value = data as bool;
-        return super.pref.setBool(key, value);
+        return pref.setBool(key, value);
       case cacheEnum.string:
         String value = data as String;
-        return super.pref.setString(key, value);
+        return pref.setString(key, value);
       case cacheEnum.int:
         int value = data as int;
-        return super.pref.setInt(key, value);
+        return pref.setInt(key, value);
       case cacheEnum.double:
         double value = data as double;
-        return super.pref.setDouble(key, value);
+        return pref.setDouble(key, value);
     }
   }
 }
