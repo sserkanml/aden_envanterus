@@ -55,31 +55,31 @@ class Member {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'oid': oid,
+      'Oid': oid,
       'kullaniciAdi': kullaniciAdi,
       'kullaniciSifre': kullaniciSifre,
-      'adiSoyadi': adiSoyadi,
-      'firmaId': firmaId,
-      'kaydeden': kaydeden,
+      'adi_soyadi': adiSoyadi,
+      'firma_id': firmaId,
+      'Kaydeden': kaydeden,
       'kaytar': kaytar,
       'songirtar': songirtar,
       'yetki': yetki,
-      'aktifPasif': aktifPasif,
+      'aktif_pasif': aktifPasif,
     };
   }
 
   factory Member.fromMap(Map<String, dynamic> map) {
     return Member(
-      oid: map['oid'] != null ? map['oid'] as String : null,
+      oid: map['Oid'] != null ? map['Oid'] as String : null,
       kullaniciAdi: map['kullaniciAdi'] != null ? map['kullaniciAdi'] as String : null,
       kullaniciSifre: map['kullaniciSifre'] != null ? map['kullaniciSifre'] as String : null,
-      adiSoyadi: map['adiSoyadi'] != null ? map['adiSoyadi'] as String : null,
-      firmaId: map['firmaId'] != null ? map['firmaId'] as String : null,
+      adiSoyadi: map['adi_soyadi'] != null ? map['adi_soyadi'] as String : null,
+      firmaId: map['firma_id'] != null ? map['firma_id'] as String : null,
       kaydeden: map['kaydeden'] != null ? map['kaydeden'] as String : null,
       kaytar: map['kaytar'] != null ? map['kaytar'] as String : null,
       songirtar: map['songirtar'] != null ? map['songirtar'] as String : null,
       yetki: map['yetki'] != null ? map['yetki'] as int : null,
-      aktifPasif: map['aktifPasif'] != null ? map['aktifPasif'] as int : null,
+      aktifPasif: map['aktif_pasif'] != null ? map['aktif_pasif'] as int : null,
     );
   }
 

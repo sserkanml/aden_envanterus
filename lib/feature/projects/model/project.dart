@@ -70,16 +70,16 @@ class Project {
 
   factory Project.fromMap(Map<String, dynamic> map) {
     return Project(
-      oid: map['oid'] != null ? map['oid'] as String : null,
-      firmaKullaniciID: map['firmaKullaniciID'] != null ? map['firmaKullaniciID'] as String : null,
-      firmaID: map['firmaID'] != null ? map['firmaID'] as String : null,
-      projeAdi: map['projeAdi'] != null ? map['projeAdi'] as String : null,
-      kaydeden: map['kaydeden'] != null ? map['kaydeden'] as String : null,
-      kayitZamani: map['kayitZamani'] != null ? map['kayitZamani'] as String : null,
-      projeNot: map['projeNot'] != null ? map['projeNot'] as String : null,
-      etiket: map['etiket'] != null ? map['etiket'] as String : null,
-      projeResim: map['projeResim'] != null ? map['projeResim'] as String : null,
-      musteriID: map['musteriID'] != null ? map['musteriID'] as String : null,
+      oid: map['Oid'] != null ? map['Oid'] as String : null,
+      firmaKullaniciID: map['FirmaKullaniciID'] != null ? map['FirmaKullaniciID'] as String : null,
+      firmaID: map['FirmaID'] != null ? map['FirmaID'] as String : null,
+      projeAdi: map['Proje_Adi'] != null ? map['Proje_Adi'] as String : null,
+      kaydeden: map['Kaydeden'] != null ? map['Kaydeden'] as String : null,
+      kayitZamani: map['Kayit_Zamani'] != null ? map['Kayit_Zamani'] as String : null,
+      projeNot: map['Proje_Not'] != null ? map['Proje_Not'] as String : null,
+      etiket: map['Etiket'] != null ? map['Etiket'] as String : null,
+      projeResim: map['Proje_Resim'] != null ? map['Proje_Resim'] as String : null,
+      musteriID: map['Musteri_ID'] != null ? map['Musteri_ID'] as String : null,
     );
   }
 

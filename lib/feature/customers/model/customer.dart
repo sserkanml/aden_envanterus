@@ -80,18 +80,18 @@ class Customer {
 
   factory Customer.fromMap(Map<String, dynamic> map) {
     return Customer(
-      oid: map['oid'] != null ? map['oid'] as String : null,
-      musteriFirmaAdi: map['musteriFirmaAdi'] != null ? map['musteriFirmaAdi'] as String : null,
-      musteriYetkili: map['musteriYetkili'] != null ? map['musteriYetkili'] as String : null,
-      musteriTelefon: map['musteriTelefon'] != null ? map['musteriTelefon'] as String : null,
-      musteriEmail: map['musteriEmail'] != null ? map['musteriEmail'] as String : null,
-      musteriAdres: map['musteriAdres'] != null ? map['musteriAdres'] as String : null,
-      musteriVergiNo: map['musteriVergiNo'] != null ? map['musteriVergiNo'] as String : null,
-      musteriVergiDaire: map['musteriVergiDaire'] != null ? map['musteriVergiDaire'] as String : null,
+      oid: map['Oid'] != null ? map['Oid'] as String : null,
+      musteriFirmaAdi: map['musteri_firma_adi'] != null ? map['musteri_firma_adi'] as String : null,
+      musteriYetkili: map['musteri_yetkili'] != null ? map['musteri_yetkili'] as String : null,
+      musteriTelefon: map['musteri_telefon'] != null ? map['musteri_telefon'] as String : null,
+      musteriEmail: map['musteri_email'] != null ? map['musteri_email'] as String : null,
+      musteriAdres: map['musteri_adres'] != null ? map['musteri_adres'] as String : null,
+      musteriVergiNo: map['musteri_vergi_no'] != null ? map['musteri_vergi_no'] as String : null,
+      musteriVergiDaire: map['musteri_vergi_daire'] != null ? map['musteri_vergi_daire'] as String : null,
       kaytar: map['kaytar'] != null ? map['kaytar'] as String : null,
-      firmaId: map['firmaId'] != null ? map['firmaId'] as String : null,
-      aktifPasif: map['aktifPasif'] != null ? map['aktifPasif'] as int : null,
-      projeID: map['projeID'] != null ? map['projeID'] as String : null,
+      firmaId: map['firma_id'] != null ? map['firma_id'] as String : null,
+      aktifPasif: map['aktif_pasif'] != null ? map['aktif_pasif'] as int : null,
+      projeID: map['Proje_ID'] != null ? map['Proje_ID'] as String : null,
     );
   }
 

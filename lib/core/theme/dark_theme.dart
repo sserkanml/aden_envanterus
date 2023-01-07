@@ -60,7 +60,7 @@ class DarkTheme implements Itheme {
         elevation: 1,
         backgroundColor: Color(0xFF424242),
         centerTitle: false,
-        iconTheme: IconThemeData(color: Color(0XFF000000), size: 20)),
+        iconTheme: IconThemeData(color: Color(0XFFffffff), size: 20)),
     selectedRowColor: const Color(0xFFF5F5F5),
     unselectedWidgetColor: const Color(0xB3FFFFFF),
     dividerColor: const Color(0x1FFFFFFF),

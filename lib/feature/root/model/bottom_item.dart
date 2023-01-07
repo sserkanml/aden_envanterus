@@ -1,3 +1,4 @@
+import 'package:aden/core/logic/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -18,5 +19,5 @@ List<BottomItemModel> bottomData = [
       label: "Müşteriler", path: "/customers", icon: LineIcons.users),
   BottomItemModel(
       label: "Projeler", path: "/projects", icon: LineIcons.projectDiagram),
-  BottomItemModel(label: "Ayarlar", path: "/settings", icon: LineIcons.cog),
+  BottomItemModel(label: "Ayarlar", path: "/settings" , icon: LineIcons.cog),
 ];

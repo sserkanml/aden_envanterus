@@ -12,6 +12,10 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Galeriyi Kullanmaya İzin Ver ?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Kamerayı Kullanmaya İzin Ver ?</string>
 	<key>CFBundleName</key>
 	<string>aden</string>
 	<key>CFBundlePackageType</key>

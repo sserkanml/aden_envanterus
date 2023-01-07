@@ -1,6 +1,8 @@
+import 'package:aden/feature/root/controller/page_navigation.dart';
 import 'package:aden/feature/root/model/bottom_item.dart';
 import 'package:aden/feature/root/widget/bottom_item_wigdet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kartal/kartal.dart';
 
@@ -12,7 +14,6 @@ class RootPage extends StatefulWidget {
 }
 
 class _RootPageState extends State<RootPage> {
-  int idPage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,23 +38,26 @@ class _RootPageState extends State<RootPage> {
               bottomData.length,
               (index) {
                 return Expanded(
-                  child: Material(
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          idPage = index;
-                          Modular.to.pushNamed(bottomData[index].path);
-                        });
-                      },
-                      child: BottomItemWigdet(
-                          label: bottomData[index].label,
-                          path: bottomData[index].path,
-                          icon: bottomData[index].icon,
-                          color: idPage == index
-                              ? context.colorScheme.primary
-                              : context.colorScheme.onSurface.withOpacity(.2)),
-                    ),
-                  ),
+                  child: Observer(builder: (_) {
+                    return Material(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            Modular.get<PageNavigation>().idPage = index;
+                            Modular.to.pushNamed(bottomData[index].path);
+                          });
+                        },
+                        child: BottomItemWigdet(
+                            label: bottomData[index].label,
+                            path: bottomData[index].path,
+                            icon: bottomData[index].icon,
+                            color: Modular.get<PageNavigation>().idPage == index
+                                ? context.colorScheme.primary
+                                : context.colorScheme.onSurface
+                                    .withOpacity(.2)),
+                      ),
+                    );
+                  }),
                 );
               },
             )
