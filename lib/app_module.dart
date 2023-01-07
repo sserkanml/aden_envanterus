@@ -1,6 +1,9 @@
 import 'package:aden/core/logic/date_time.dart';
 import 'package:aden/feature/authentication/controller/auth_mobx.dart';
 import 'package:aden/feature/authentication/controller/user_session.dart';
+import 'package:aden/feature/checks/controller/check_service.dart';
+import 'package:aden/feature/checks/model/check_info_service.dart';
+import 'package:aden/feature/customers/controller/customer_module.dart';
 import 'package:aden/feature/customers/controller/customer_service.dart';
 import 'package:aden/feature/item/controller/item_service.dart';
 import 'package:aden/feature/projects/controller/project_module.dart';
@@ -32,8 +35,10 @@ class AppModule extends Module {
         Bind.lazySingleton<ServiceConstant>((i) => ServiceConstant()),
         Bind.lazySingleton<ConstantPrefKey>((i) => ConstantPrefKey()),
         Bind.lazySingleton<PageNavigation>((i) => PageNavigation()),
+        Bind.lazySingleton<CheckInfoService>((i) => CheckInfoService()),
         Bind.lazySingleton<ItemService>((i) => ItemService()),
         Bind.lazySingleton<MemberService>((i) => MemberService()),
+         Bind.lazySingleton<CheckService>((i) => CheckService()),
         Bind.lazySingleton<CustomerService>((i) => CustomerService()),
         Bind.lazySingleton<ProjectService>((i) => ProjectService()),
         Bind.lazySingleton<DateTimeLogic>((i) => DateTimeLogic()),
@@ -46,6 +51,7 @@ class AppModule extends Module {
         ModuleRoute("/authentication",
             transition: TransitionType.noTransition, module: AuhtModule()),
         ModuleRoute("/create-project", module: CreateProjectModule()),
+         ModuleRoute("/create-customer", module: CustomerModule()),
         ModuleRoute("/setting-detail-user",
             transition: TransitionType.rightToLeft, module: SettingModule()),
       ];

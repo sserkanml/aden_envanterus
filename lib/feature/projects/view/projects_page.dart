@@ -28,12 +28,14 @@ class _ProjectsPageState extends State<ProjectsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
+          heroTag: "add-project",
           backgroundColor: context.colorScheme.primary,
           onPressed: () {
             Modular.to.pushNamed("/create-project");
           },
           child: const Icon(
             Icons.add,
+            color: Colors.white,
             size: 30,
           ),
         ),
@@ -87,6 +89,8 @@ class _ProjectsPageState extends State<ProjectsPage> {
                           horizontal: 8.0,
                         ),
                         onTap: () async {
+                          Modular.to.pushNamed("/create-project/project-detail",
+                              arguments: p0);
                           setState(() {});
                         },
                         trailing: Text(Modular.get<DateTimeLogic>()

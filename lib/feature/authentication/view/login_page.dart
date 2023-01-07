@@ -1,5 +1,6 @@
 import 'package:aden/core/util/utils.dart';
 import 'package:aden/feature/authentication/controller/auth_mobx.dart';
+import 'package:aden/feature/checks/controller/check_service.dart';
 import 'package:aden/feature/customers/controller/customer_service.dart';
 import 'package:aden/feature/item/controller/item_service.dart';
 import 'package:aden/feature/projects/controller/projects_service.dart';
@@ -49,7 +50,8 @@ class _LoginPageState extends State<LoginPage> {
       await Modular.get<MemberService>().getAllMember();
       await Modular.get<ItemService>().getAllItem();
       await Modular.get<CustomerService>().getAllCustomer();
-        await Modular.get<ProjectService>().getAllProject();
+      await Modular.get<ProjectService>().getAllProject();
+      await Modular.get<CheckService>().getAllCheck();
       roundedLoadingButtonController.success();
       setState(() {
         isError = false;

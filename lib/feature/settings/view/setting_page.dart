@@ -153,8 +153,9 @@ class _SettingPageState extends State<SettingPage> {
                 onPressed: () {
                   Modular.to.pop();
                 },
-                child: const Text(
+                child:  Text(
                   "İptal",
+                  style: context.textTheme.bodyMedium,
                 ),
               ),
             ),

@@ -33,6 +33,19 @@ class _CustomerPageState extends State<CustomerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          heroTag: "create-customer",
+          backgroundColor: context.colorScheme.primary,
+          onPressed: () async {
+            await Modular.to.pushNamed("/create-customer");
+            setState(() {});
+          },
+          child: const Icon(
+            Icons.add,
+            size: 30,
+            color: Colors.white,
+          ),
+        ),
         appBar: AppBar(
           automaticallyImplyLeading: false,
           actions: const [
@@ -83,7 +96,8 @@ class _CustomerPageState extends State<CustomerPage> {
                           horizontal: 8.0,
                         ),
                         onTap: () async {
-                          
+                          Modular.to.pushNamed("/create-customer/customer-detail"
+                          ,arguments: p0);
                           setState(() {});
                         },
                         trailing: p0.aktifPasif == 0

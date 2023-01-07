@@ -19,6 +19,9 @@ abstract class _ItemServiceBase with Store {
   @observable
   bool isCorrectLoad = false;
 
+  @computed
+  int get getItemLength => items.length;
+
   @action
   Future<void> getAllItem() async {
     final url = Uri.http(Modular.get<ServiceConstant>().baseUrl,
@@ -29,7 +32,7 @@ abstract class _ItemServiceBase with Store {
           headers: {"cookie": Modular.get<UserSession>().userSession});
       if (response.statusCode == HttpStatus.ok) {
         final result = jsonDecode(response.body);
-        print(result);
+
         if (result is Map) {
           final listItem = result["jsonData_1"];
 
@@ -37,13 +40,10 @@ abstract class _ItemServiceBase with Store {
             items = ObservableList.of(
                 listItem.map<ItemModel>((e) => ItemModel.fromMap(e)).toList());
             isCorrectLoad = true;
-            print(items);
           } else {
-            print(listItem);
             isCorrectLoad = false;
           }
         } else {
-          print(result);
           isCorrectLoad = false;
         }
       } else {

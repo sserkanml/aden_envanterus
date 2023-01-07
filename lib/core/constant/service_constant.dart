@@ -4,6 +4,6 @@ class ServiceConstant {
   final String getLogin = "Api/LoginUye";
   final String getProject = "Api/GetProjeler";
   final String getMember = "Api/GetUyeler";
-   final String getItem = "Api/GetMalzemeler";
-  
+  final String getItem = "Api/GetMalzemeler";
+  final String getCheck = "Api/GetSayimlar";
 }

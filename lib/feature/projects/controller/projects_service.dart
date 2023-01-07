@@ -18,6 +18,9 @@ abstract class _ProjectServiceBase with Store {
   @observable
   bool isCorrectLoad = false;
 
+  @computed
+  int get getProjectLength => projects.length;
+
   @action
   Future<void> getAllProject() async {
     final url = Uri.http(Modular.get<ServiceConstant>().baseUrl,
@@ -32,16 +35,16 @@ abstract class _ProjectServiceBase with Store {
         if (projectApi is List) {
           projects = ObservableList.of(
               projectApi.map<Project>((e) => Project.fromMap(e)).toList());
-              isCorrectLoad=true;
+          isCorrectLoad = true;
         } else {
-              isCorrectLoad=false;
+          isCorrectLoad = false;
         }
       } else {
-            isCorrectLoad=false;
+        isCorrectLoad = false;
       }
     } catch (e) {
       print(e);
-          isCorrectLoad=false;
+      isCorrectLoad = false;
     }
   }
 }

@@ -9,6 +9,14 @@ part of 'customer_service.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CustomerService on _CustomerServiceBase, Store {
+  Computed<int>? _$getLengthComputed;
+
+  @override
+  int get getLength =>
+      (_$getLengthComputed ??= Computed<int>(() => super.getLength,
+              name: '_CustomerServiceBase.getLength'))
+          .value;
+
   late final _$customersAtom =
       Atom(name: '_CustomerServiceBase.customers', context: context);
 
@@ -53,7 +61,8 @@ mixin _$CustomerService on _CustomerServiceBase, Store {
   String toString() {
     return '''
 customers: ${customers},
-isCorrectLoad: ${isCorrectLoad}
+isCorrectLoad: ${isCorrectLoad},
+getLength: ${getLength}
     ''';
   }
 }

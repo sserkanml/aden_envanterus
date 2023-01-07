@@ -1,16 +1,18 @@
 import 'dart:io';
 
 import 'package:aden/feature/customers/controller/customer_service.dart';
+import 'package:aden/feature/projects/controller/form_project_create.dart';
+import 'package:aden/feature/projects/model/post_project.dart';
 import 'package:aden/feature/settings/controller/user_service.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:getwidget/getwidget.dart';
 import 'package:kartal/kartal.dart';
+import 'package:multi_image_picker_view/multi_image_picker_view.dart';
+import 'package:phone_form_field_plus/phone_form_field_plus.dart';
 
 class CreateProject extends StatefulWidget {
   const CreateProject({Key? key}) : super(key: key);
@@ -23,10 +25,30 @@ class _CreateProjectState extends State<CreateProject> {
   late FocusNode userNameFocus;
   late SingleValueDropDownController customerDropDown;
   late SingleValueDropDownController userDropDown;
+  late MultiImagePickerController imagePickerController;
+  String customer = "";
+  String member = "";
+  PostProject postProjectEmpty = PostProject(
+      imageFile: null,
+      projectName: "",
+      customerId: "",
+      memberId: "",
+      note: "",
+      tags: []);
+  PostProject postProjectChanged = PostProject(
+      imageFile: null,
+      projectName: "",
+      customerId: "",
+      memberId: "",
+      note: "",
+      tags: []);
   List<String> tags = [];
+
   @override
   void initState() {
     customerDropDown = SingleValueDropDownController();
+    imagePickerController = MultiImagePickerController(
+        maxImages: 1, allowedImageTypes: ["png", "jpeg", "jpg"], images: []);
     userDropDown = SingleValueDropDownController();
 
     super.initState();
@@ -39,18 +61,24 @@ class _CreateProjectState extends State<CreateProject> {
     super.dispose();
   }
 
-  
-
-  
-
   double gap = 20;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () {
-              Modular.to.pop();
+            onPressed: () async {
+              if (postProjectChanged == postProjectEmpty) {
+                Modular.to.pop();
+              } else {
+                final result = await closeDialog(context);
+
+                if (result!) {
+                  Modular.to.pop();
+                } else {
+                  return;
+                }
+              }
             },
             icon: const Icon(Icons.arrow_back),
           ),
@@ -63,37 +91,15 @@ class _CreateProjectState extends State<CreateProject> {
             child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Form(
+            key: CreateProjectForm.projectForm,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Fotoğraf Ekle',
-                      style: context.textTheme.bodyLarge,
-                    ),
-                    GFIconButton(
-                      icon: const Icon(FontAwesomeIcons.camera),
-                      onPressed: ()  {
-                  
-                      },
-                    )
-                  ],
-                ),
+                pickImage(context),
                 SizedBox(
                   height: gap,
                 ),
-                TextFormField(
-                  onFieldSubmitted: (value) {},
-                  decoration: const InputDecoration(
-                      labelText: "Proje Adı",
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 8.0,
-                      ),
-                      border: OutlineInputBorder()),
-                ),
+                projectNameField(),
                 SizedBox(
                   height: gap,
                 ),
@@ -105,72 +111,251 @@ class _CreateProjectState extends State<CreateProject> {
                 SizedBox(
                   height: gap,
                 ),
-                TextFormField(
-                  maxLines: 5,
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "Not Yaz",
-                      alignLabelWithHint: true,
-                      labelText: "Not"),
-                ),
+                noteField(),
                 SizedBox(
                   height: gap,
                 ),
-                FlutterInputChips(
-                  maxChips: 4,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5.0,
-                  ),
-                  chipBackgroundColor: context.colorScheme.primary,
-                  chipSpacing: 10,
-                  initialValue: const [],
-                  chipDeleteIcon: const Icon(Icons.close),
-                  chipDeleteIconColor: Colors.white,
-                  chipTextStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  inputDecoration: const InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Etiket",
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 8.0,
-                        horizontal: 8.0,
-                      )),
-                  onChanged: (value) {
-                    setState(() {
-                      tags = value;
-                    });
-                  },
-                ),
+           
+                tagsChip(context),
                 SizedBox(
                   height: gap,
                 ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Kaydet",
-                        style: context.textTheme.bodyMedium!
-                            .copyWith(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                )
+                saveRow(context)
               ],
             ),
           ),
         )));
   }
 
+  TextFormField projectNameField() {
+    return TextFormField(
+                onChanged: (value) {
+                  postProjectChanged.projectName = value;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value.isNotNullOrNoEmpty) {
+                    return null;
+                  } else {
+                    return "Bu alan boş geçilemez";
+                  }
+                },
+                onFieldSubmitted: (value) {},
+                decoration: const InputDecoration(
+                    labelText: "Proje Adı",
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 8.0,
+                    ),
+                    border: OutlineInputBorder()),
+              );
+  }
+
+  Row saveRow(BuildContext context) {
+    return Row(
+                children: [
+                  const Spacer(),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (CreateProjectForm.projectForm.currentState!
+                          .validate()) {
+                        CreateProjectForm.projectForm.currentState!.save();
+                      } else {}
+                    },
+                    child: Text(
+                      "Kaydet",
+                      style: context.textTheme.bodyMedium!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ),
+                ],
+              );
+  }
+
+  TextFormField noteField() {
+    return TextFormField(
+                maxLines: 5,
+                onChanged: (value) {
+                  postProjectChanged.note = value;
+                },
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: "Not Yaz",
+                    alignLabelWithHint: true,
+                    labelText: "Not"),
+              );
+  }
+
+  Future<bool?> closeDialog(BuildContext context) {
+    return showDialog<bool>(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text(
+                      'Değişikleri Kaydet',
+                      style: context.textTheme.bodyMedium,
+                    ),
+                    content: Text(
+                      'Yaptığınız değişikler silinecektir',
+                      style: context.textTheme.bodyMedium,
+                    ),
+                    actions: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white),
+                        onPressed: () {
+                          Navigator.pop<bool>(context, false);
+                        },
+                        child: Text(
+                          "İptal Et",
+                          style: context.textTheme.bodyMedium!
+                              .copyWith(color: context.colorScheme.primary),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop<bool>(context, true);
+                        },
+                        child: Text(
+                          "Çıkış Yap",
+                          style: context.textTheme.bodyMedium!
+                              .copyWith(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+  }
+
+  SizedBox pickImage(BuildContext context) {
+    return SizedBox(
+      height: 200,
+      width: context.dynamicWidth(1),
+      child: MultiImagePickerView(
+        onChange: (p0) {
+        
+          postProjectChanged.imageFile = p0.firstOrNull;
+        },
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            mainAxisExtent: 200, maxCrossAxisExtent: context.dynamicWidth(1)),
+        addMoreBuilder: null,
+        draggable: false,
+        controller: imagePickerController,
+        itemBuilder: (context, file, deleteCallback) {
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(
+                  child: Image.file(
+                File(file.path!),
+                fit: BoxFit.cover,
+              )),
+              Positioned(
+                top: -10,
+                right: -10,
+                child: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: context.colorScheme.primary),
+                  height: 40,
+                  width: 40,
+                  child: Center(
+                    child: Material(
+                      color: context.colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50)),
+                      child: IconButton(
+                        onPressed: () {
+                          deleteCallback(file);
+                        },
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+        initialContainerBuilder: (context, pickerCallback) {
+          return InkWell(
+            onTap: () {
+              pickerCallback();
+            },
+            child: dottedAddImage(context),
+          );
+        },
+      ),
+    );
+  }
+
+  FlutterInputChips tagsChip(BuildContext context) {
+    return FlutterInputChips(
+      maxChips: 4,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 5.0,
+      ),
+      chipBackgroundColor: context.colorScheme.primary,
+      chipSpacing: 10,
+      initialValue: const [],
+      chipDeleteIcon: const Icon(Icons.close),
+      chipDeleteIconColor: Colors.white,
+      chipTextStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      inputDecoration: const InputDecoration(
+          border: InputBorder.none,
+          hintText: "Etiket",
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          )),
+      onChanged: (value) {
+        setState(() {
+          tags = value;
+          postProjectChanged.tags = tags;
+        });
+      },
+    );
+  }
+
+  DottedBorder dottedAddImage(BuildContext context) {
+    return DottedBorder(
+        color: context.colorScheme.onSurface.withOpacity(.4),
+        dashPattern: const [6, 6],
+        strokeWidth: 2,
+        child: SizedBox(
+          width: context.dynamicWidth(1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(Icons.browse_gallery),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Resim Ekle',
+                style: context.textTheme.bodyLarge!.copyWith(
+                    color: context.colorScheme.onSurface.withOpacity(.5)),
+              )
+            ],
+          ),
+        ));
+  }
+
   DropDownTextField dropDownMember() {
     return DropDownTextField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         textFieldDecoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.symmetric(
@@ -180,13 +365,19 @@ class _CreateProjectState extends State<CreateProject> {
             hintText: "Kullanıcı Seç",
             labelText: "Kullanıcı Seç"),
         validator: (value) {
-          if (value == null) {
+          if (value.isNullOrEmpty) {
             return "Bu alan boş geçilemez";
           } else {
             return null;
           }
         },
-        onChanged: (value) {},
+        onChanged: (value) {
+          if (value is DropDownValueModel) {
+            postProjectChanged.memberId = value.value;
+          } else {
+            postProjectChanged.memberId = "";
+          }
+        },
         dropDownList: [
           ...List.generate(
               Modular.get<CustomerService>().getLength,
@@ -200,6 +391,7 @@ class _CreateProjectState extends State<CreateProject> {
 
   DropDownTextField dropdownCustomer() {
     return DropDownTextField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: customerDropDown,
         textFieldDecoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -210,13 +402,19 @@ class _CreateProjectState extends State<CreateProject> {
             hintText: "Müşteri Seç",
             labelText: "Müşteri Seç"),
         validator: (value) {
-          if (value == null) {
+          if (value.isNullOrEmpty) {
             return "Bu alan boş geçilemez";
           } else {
             return null;
           }
         },
-        onChanged: (value) {},
+        onChanged: (value) {
+          if (value is DropDownValueModel) {
+            postProjectChanged.customerId = value.value;
+          } else {
+            postProjectChanged.customerId = "";
+          }
+        },
         dropDownList: [
           ...List.generate(
               Modular.get<CustomerService>().getLength,
@@ -228,29 +426,5 @@ class _CreateProjectState extends State<CreateProject> {
                   value: Modular.get<CustomerService>().customers[index].oid))
         ],
         dropDownItemCount: Modular.get<CustomerService>().getLength);
-  }
-}
-
-class ChristianPickerImage {
-  static const MethodChannel _channel = MethodChannel('christian_picker_image');
-
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-
-  static Future<List<File>> pickImages({
-    required int maxImages,
-    enableGestures = true,
-  }) async {
-    final List<dynamic> images = await _channel.invokeMethod(
-        'pickImages', <String, dynamic>{
-      "maxImages": maxImages,
-      "enableGestures": enableGestures
-    });
-
-    return images.map((f) {
-      return File(f["path"]);
-    }).toList();
   }
 }
