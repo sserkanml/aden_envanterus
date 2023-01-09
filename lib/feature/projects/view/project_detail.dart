@@ -1,5 +1,6 @@
 import 'package:aden/feature/customers/controller/customer_service.dart';
 import 'package:aden/feature/projects/model/project.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_input_chips/flutter_input_chips.dart';
@@ -62,8 +63,10 @@ class _ProjectDetailState extends State<ProjectDetail> {
                         null
                     ? ElevatedButton(
                         onPressed: () {},
-                        child: const Text(
+                        child: Text(
                           "Firma Ata",
+                          style: context.textTheme.bodyMedium!
+                              .copyWith(color: Colors.white),
                         ),
                       )
                     : Text(
@@ -76,34 +79,53 @@ class _ProjectDetailState extends State<ProjectDetail> {
               height: gap,
             ),
             SizedBox(
-              height: 200,
-              width: context.dynamicWidth(1),
-              child: widget.project.projeResim.isNullOrEmpty
-                  ? DottedBorder(
-                      strokeWidth: 2,
-                      color: context.colorScheme.onSurface.withOpacity(.4),
-                      dashPattern: const [6, 6],
-                      child: SizedBox(
+                height: 200,
+                width: context.dynamicWidth(1),
+                child: widget.project.projeResim.isNullOrEmpty
+                    ? DottedBorder(
+                        strokeWidth: 2,
+                        color: context.colorScheme.onSurface.withOpacity(.4),
+                        dashPattern: const [6, 6],
+                        child: SizedBox(
+                          width: context.dynamicWidth(1),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Resim Bulunamadı',
+                                style: context.textTheme.bodyLarge!.copyWith(
+                                    color: context.colorScheme.onSurface
+                                        .withOpacity(.7)),
+                              )
+                            ],
+                          ),
+                        ))
+                    // : Image.network(
+                    //     "http://envanter.sgktesvikrehberi.com/Content/Upload/${widget.project.projeResim}",
+                    //     width: context.dynamicWidth(1),
+                    //     height: 200,
+                    //     fit: BoxFit.cover,
+                    //   ),
+                    : CachedNetworkImage(
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        progressIndicatorBuilder: (context, url, progress) {
+                          return Center(
+                            child: SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: CircularProgressIndicator(
+                                value: progress.progress,
+                              ),
+                            ),
+                          );
+                        },
                         width: context.dynamicWidth(1),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Resim Bulunamadı',
-                              style: context.textTheme.bodyLarge!.copyWith(
-                                  color: context.colorScheme.onSurface
-                                      .withOpacity(.7)),
-                            )
-                          ],
-                        ),
-                      ))
-                  : Image.network(
-                      "http://envanter.sgktesvikrehberi.com/Content/Upload/${widget.project.projeResim}",
-                      width: context.dynamicWidth(1),
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
-            ),
+                        height: 200,
+                        fit: BoxFit.cover,
+                        imageUrl:
+                            "http://envanter.sgktesvikrehberi.com/Content/Upload/${widget.project.projeResim}",
+                      )),
             SizedBox(
               height: gap,
             ),

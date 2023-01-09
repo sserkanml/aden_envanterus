@@ -21,7 +21,7 @@ class _UserDetailState extends State<UserDetail> {
   @override
   void initState() {
     dropDownValue = widget.member.yetki == 0 ? "Kulllanıcı" : "Admin";
-    print(dropDownValue);
+    
     passwordController = TextEditingController();
     userNameController = TextEditingController();
 
@@ -34,7 +34,7 @@ class _UserDetailState extends State<UserDetail> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+
     super.dispose();
   }
 

@@ -41,6 +41,12 @@ abstract class _CheckServiceBase with Store {
                   .firstWhere((customer) => customer.oid == element.musteriID)
                   .musteriFirmaAdi ??
               "",
+              dateSaved: element.kayitZamani ?? " ",
+              unitName: Modular.get<ItemService>()
+                  .items
+                  .firstWhere((item) => item.oid == element.malzeme)
+                  .birim ??
+              "" ,
           quantity:
               checks.firstWhere((check) => check.sayim == element.oid).miktar ??
                   0,

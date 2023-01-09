@@ -18,6 +18,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Modular.setInitialRoute("/dashboard");
+    
     return AdaptiveTheme(
       light: Modular.get<LightTheme>().theme,
       dark: Modular.get<DarkTheme>().theme,

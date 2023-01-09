@@ -6,7 +6,6 @@ import 'package:kartal/kartal.dart';
 import 'package:searchable_listview/resources/arrays.dart';
 import 'package:searchable_listview/searchable_listview.dart';
 
-import '../../settings/controller/user_service.dart';
 import '../model/customer.dart';
 
 class CustomerPage extends StatefulWidget {
@@ -96,8 +95,9 @@ class _CustomerPageState extends State<CustomerPage> {
                           horizontal: 8.0,
                         ),
                         onTap: () async {
-                          Modular.to.pushNamed("/create-customer/customer-detail"
-                          ,arguments: p0);
+                          Modular.to.pushNamed(
+                              "/create-customer/customer-detail",
+                              arguments: p0);
                           setState(() {});
                         },
                         trailing: p0.aktifPasif == 0

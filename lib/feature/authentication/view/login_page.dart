@@ -4,11 +4,15 @@ import 'package:aden/feature/checks/controller/check_service.dart';
 import 'package:aden/feature/customers/controller/customer_service.dart';
 import 'package:aden/feature/item/controller/item_service.dart';
 import 'package:aden/feature/projects/controller/projects_service.dart';
+import 'package:aden/feature/root/controller/connectivity_service.dart';
 import 'package:aden/feature/settings/controller/user_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:mobx/mobx.dart';
 import 'package:kartal/kartal.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -26,7 +30,9 @@ class _LoginPageState extends State<LoginPage> {
   double gap = 20;
   late TextEditingController passwordController;
   late TextEditingController emailController;
-
+  bool isConnected = true;
+  bool isFirstCheckConnect = true;
+  bool isFirstTry = true;
   late FocusNode password;
   @override
   void initState() {
@@ -34,8 +40,15 @@ class _LoginPageState extends State<LoginPage> {
     passwordController = TextEditingController();
     password = FocusNode();
     isError = false;
+
     roundedLoadingButtonController = RoundedLoadingButtonController();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies()  {
+   
+    super.didChangeDependencies();
   }
 
   @override
@@ -52,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
       await Modular.get<CustomerService>().getAllCustomer();
       await Modular.get<ProjectService>().getAllProject();
       await Modular.get<CheckService>().getAllCheck();
+
       roundedLoadingButtonController.success();
       setState(() {
         isError = false;
@@ -164,15 +178,49 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: gap,
                     ),
-                    RoundedLoadingButton(
-                        width: context.dynamicWidth(1),
-                        controller: roundedLoadingButtonController,
-                        onPressed: getAuht,
-                        child: Text(
-                          'Giriş Yap',
-                          style: context.textTheme.bodyMedium!
-                              .copyWith(color: Colors.white),
-                        )),
+                    ReactionBuilder(
+                      builder: (context) {
+                        return reaction(
+                          delay: 1000,
+                          (p0) => Modular.get<ConnectivityService>()
+                              .connectivityStream
+                              .value,
+                          (p0) {
+                            if (p0 == ConnectivityResult.none) {
+                              isConnected = false;
+                              isFirstTry = false;
+                              setState(() {});
+                            } else {
+                              isConnected = true;
+                              isFirstTry = false;
+                              setState(() {});
+                            }
+                          },
+                        );
+                      },
+                      child: RoundedLoadingButton(
+                          width: context.dynamicWidth(1),
+                          disabledColor: Colors.grey,
+                          controller: roundedLoadingButtonController,
+                          onPressed: isFirstTry
+                              ? (Modular.get<ConnectivityService>()
+                                      .isFirstConnected
+                                  ? getAuht
+                                  : null)
+                              : (isConnected ? getAuht : null),
+                          child: Text(
+                            isFirstTry
+                                ? (Modular.get<ConnectivityService>()
+                                        .isFirstConnected
+                                    ? 'Giriş Yap'
+                                    : "İnternet bağlantınızı kontrol edin")
+                                : (isConnected
+                                    ? 'Giriş Yap'
+                                    : "İnternet bağlantınızı kontrol edin"),
+                            style: context.textTheme.bodyMedium!
+                                .copyWith(color: Colors.white),
+                          )),
+                    ),
                     SizedBox(
                       height: gap,
                     ),

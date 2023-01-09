@@ -33,15 +33,105 @@ class _DashboardPageState extends State<DashboardPage> {
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TopSide(dashboard: dashboard),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: TabContainerWidget(controller: tabContainerController),
-            )
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            lastItem(context),
+            Container(
+                height: 200,
+                color: context.colorScheme.background,
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemBuilder: (context, index) {
+                    return const SizedBox(
+                      width: 170,
+                      child: Card(
+                        elevation: 1,
+                        margin: EdgeInsets.only(right: 10),
+                      ),
+                    );
+                  },
+                  itemCount: 5,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  primary: false,
+                )),
+            reports(context),
+            Container(
+                color: context.colorScheme.background,
+                height: 200,
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemBuilder: (context, index) {
+                    return const SizedBox(
+                      width: 170,
+                      child: Card(
+                        elevation: 1,
+                        margin: EdgeInsets.only(right: 10),
+                      ),
+                    );
+                  },
+                  itemCount: 5,
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  primary: false,
+                ))
           ],
         ),
       )),
+    );
+  }
+
+  Row reports(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            'Raporlar',
+            style: context.textTheme.bodyMedium!.copyWith(
+                color: context.colorScheme.onSurface.withOpacity(.5),
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        TextButton(
+          onPressed: () {},
+          child: const Text(
+            "Tümünü Gör",
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row lastItem(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            'Son Eklenen Malzemeler',
+            style: context.textTheme.bodyMedium!.copyWith(
+                color: context.colorScheme.onSurface.withOpacity(.5),
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        TextButton(
+          onPressed: () {},
+          child: const Text(
+            "Tümünü Gör",
+          ),
+        ),
+      ],
     );
   }
 }
@@ -81,27 +171,13 @@ class TopSide extends StatelessWidget {
               ),
             ],
           ),
-          // Container(
-          //   height: 50,
-          //   width: 50,
-          //   decoration: BoxDecoration(
-          //       color: const Color(0xFFFFB59D),
-          //       borderRadius: BorderRadius.circular(6),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           blurRadius: 3,
-          //           spreadRadius: 2,
-          //           color: context.colorScheme.onBackground.withOpacity(.08),
-          //         )
-          //       ]),
-          //   child: const Center(
-          //     child: Icon(
-          //       Icons.notifications,
-          //       size: 30,
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          // )
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.notifications,
+              color: context.colorScheme.onSurface.withOpacity(.4),
+            ),
+          ),
         ],
       ),
     );

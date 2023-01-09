@@ -33,7 +33,7 @@ class DarkTheme implements Itheme {
         tertiaryContainer: Color(0xFF004E59),
 
         onError: Color(0xFF000000),
-        background: Color(0xFF121212),
+        background: Color(0xff73777B),
         onBackground: Color(0xFFFFFFFF),
         surface: Color(0xFF121212),
         onSurface: Color(0xFFFFFFFF)),

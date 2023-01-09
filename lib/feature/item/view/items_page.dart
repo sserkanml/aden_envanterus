@@ -26,7 +26,7 @@ class _ItemsPageState extends State<ItemsPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return await false;
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -76,6 +76,8 @@ class _ItemsPageState extends State<ItemsPage> {
                             horizontal: 8.0,
                           ),
                           onTap: () async {
+                            await Modular.to
+                                .pushNamed("/items/item-detail", arguments: p0);
                             setState(() {});
                           },
                           trailing: Text(

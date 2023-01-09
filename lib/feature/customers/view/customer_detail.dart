@@ -4,7 +4,10 @@ import 'package:aden/feature/item/controller/item_service.dart';
 import 'package:aden/feature/item/model/item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
 import 'package:kartal/kartal.dart';
+import 'package:phone_form_field/phone_form_field.dart';
+import 'package:select_form_field/select_form_field.dart';
 
 import '../../checks/model/check.dart';
 
@@ -33,8 +36,9 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
   late FocusNode taxNoFocus;
   late FocusNode adressFocus;
   late List<ItemModel> items;
+  late String dropDownValue;
   late List<Check> checks;
-
+  late PhoneNumber customerPhoneNumber;
   @override
   void initState() {
     companyNameFocus = FocusNode();
@@ -61,6 +65,9 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
     taxNoController.text = widget.customer.musteriVergiNo ?? "";
     adressController.text = widget.customer.musteriAdres ?? "";
 
+    customerPhoneNumber = PhoneNumber(
+        isoCode: IsoCode.TR, nsn: widget.customer.musteriTelefon ?? "");
+
     checks = Modular.get<CheckService>()
         .checks
         .where((check) => (check.sayim ==
@@ -75,6 +82,8 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
         .items
         .where((element) => element.musteriID == widget.customer.oid)
         .toList();
+
+    dropDownValue = widget.customer.aktifPasif == 0 ? "Pasif" : "Aktif";
 
     super.initState();
   }
@@ -155,124 +164,80 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
         child: Form(
             child: Column(
           children: [
-            TextFormField(
-              onFieldSubmitted: (value) {
-                FocusScope.of(context).requestFocus(authorityFocus);
+            companyNameField(context),
+            SizedBox(height: gap),
+            authoriyField(context),
+            SizedBox(height: gap),
+            emailField(context),
+            SizedBox(height: gap),
+            taxPlaceField(context),
+            SizedBox(height: gap),
+            taxNoField(context),
+            SizedBox(height: gap),
+            adressField(context),
+            SizedBox(height: gap),
+            PhoneFormField(
+              autocorrect: true,
+              initialValue: customerPhoneNumber,
+              isCountrySelectionEnabled: false,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              defaultCountry: IsoCode.TR,
+              validator: (phoneNumber) {
+                if (phoneNumber?.isValid() ?? false) {
+                  return null;
+                } else {
+                  return "Geçerli telefon numarası giriniz";
+                }
               },
-              focusNode: companyNameFocus,
-              keyboardType: TextInputType.text,
-              controller: companyNameController,
               decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 8.0,
+                ),
+                labelText: "Telefon Numarası",
+                hintText: "Telefon Numarası",
+              ),
+            ),
+            SizedBox(height: gap),
+            SelectFormField(
+              initialValue: dropDownValue,
+              decoration: const InputDecoration(
+                  hintText: "Lütfen Yetki Seçiniz",
+                  labelText: "Yetki Durumu",
+                  suffixIcon: Icon(Icons.arrow_drop_down),
                   contentPadding: EdgeInsets.symmetric(
                     vertical: 8.0,
                     horizontal: 8.0,
                   ),
-                  hintText: "Şirket Adı",
-                  alignLabelWithHint: true,
-                  labelText: "Şirket Adı"),
-            ),
-            SizedBox(height: gap),
-            TextFormField(
-              onFieldSubmitted: (value) {
-                FocusScope.of(context).requestFocus(emailFocus);
+                  border: OutlineInputBorder()),
+              onChanged: (value) {
+                setState(() {
+                  dropDownValue = value;
+                });
               },
-              focusNode: authorityFocus,
-              keyboardType: TextInputType.text,
-              controller: authorityController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 8.0,
-                  ),
-                  hintText: "Yetkili",
-                  alignLabelWithHint: true,
-                  labelText: "Yetkili"),
+              items: const [
+                {
+                  'value': "Aktif",
+                  'label': "Aktif",
+                },
+                {
+                  'value': "Pasif",
+                  'label': "Pasif",
+                },
+              ],
+              type: SelectFormFieldType.dropdown,
             ),
-            SizedBox(height: gap),
-            TextFormField(
-              onFieldSubmitted: (value) {
-                FocusScope.of(context).requestFocus(taxPlaceFocus);
-              },
-              focusNode: emailFocus,
-              keyboardType: TextInputType.emailAddress,
-              controller: emailController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 8.0,
-                  ),
-                  hintText: "Email",
-                  alignLabelWithHint: true,
-                  labelText: "Email"),
-            ),
-            SizedBox(height: gap),
-            TextFormField(
-              onFieldSubmitted: (value) {
-                FocusScope.of(context).requestFocus(taxNoFocus);
-              },
-              focusNode: taxPlaceFocus,
-              keyboardType: TextInputType.text,
-              controller: taxPlaceController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 8.0,
-                  ),
-                  hintText: "Vergi Dairesi",
-                  alignLabelWithHint: true,
-                  labelText: "Vergi Dairesi"),
-            ),
-            SizedBox(height: gap),
-            TextFormField(
-              onFieldSubmitted: (value) {
-                FocusScope.of(context).requestFocus(adressFocus);
-              },
-              focusNode: taxNoFocus,
-              keyboardType: TextInputType.number,
-              controller: taxNoController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 8.0,
-                  ),
-                  hintText: "Vergi No",
-                  alignLabelWithHint: true,
-                  labelText: "Vergi No"),
-            ),
-            SizedBox(height: gap),
-            TextFormField(
-              onFieldSubmitted: (value) {
-                FocusScope.of(context).unfocus();
-              },
-              focusNode: adressFocus,
-              keyboardType: TextInputType.text,
-              maxLines: 6,
-              controller: adressController,
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 8.0,
-                  ),
-                  hintText: "Adres ",
-                  alignLabelWithHint: true,
-                  labelText: "Adres"),
-            ),
-            SizedBox(height: gap),
-            
             SizedBox(height: gap),
             Row(
               children: <Widget>[
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () {},
-                  child: const Text(
+                  child: Text(
                     "Düzenle",
+                    style: context.textTheme.bodyMedium!
+                        .copyWith(color: Colors.white),
                   ),
                 ),
               ],
@@ -280,6 +245,128 @@ class _CustomerDetailPageState extends State<CustomerDetailPage> {
           ],
         )),
       )),
+    );
+  }
+
+  TextFormField companyNameField(BuildContext context) {
+    return TextFormField(
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(authorityFocus);
+      },
+      focusNode: companyNameFocus,
+      keyboardType: TextInputType.text,
+      controller: companyNameController,
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ),
+          hintText: "Şirket Adı",
+          alignLabelWithHint: true,
+          labelText: "Şirket Adı"),
+    );
+  }
+
+  TextFormField authoriyField(BuildContext context) {
+    return TextFormField(
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(emailFocus);
+      },
+      focusNode: authorityFocus,
+      keyboardType: TextInputType.text,
+      controller: authorityController,
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ),
+          hintText: "Yetkili",
+          alignLabelWithHint: true,
+          labelText: "Yetkili"),
+    );
+  }
+
+  TextFormField emailField(BuildContext context) {
+    return TextFormField(
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(taxPlaceFocus);
+      },
+      focusNode: emailFocus,
+      keyboardType: TextInputType.emailAddress,
+      controller: emailController,
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ),
+          hintText: "Email",
+          alignLabelWithHint: true,
+          labelText: "Email"),
+    );
+  }
+
+  TextFormField taxPlaceField(BuildContext context) {
+    return TextFormField(
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(taxNoFocus);
+      },
+      focusNode: taxPlaceFocus,
+      keyboardType: TextInputType.text,
+      controller: taxPlaceController,
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ),
+          hintText: "Vergi Dairesi",
+          alignLabelWithHint: true,
+          labelText: "Vergi Dairesi"),
+    );
+  }
+
+  TextFormField taxNoField(BuildContext context) {
+    return TextFormField(
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).requestFocus(adressFocus);
+      },
+      focusNode: taxNoFocus,
+      keyboardType: TextInputType.number,
+      controller: taxNoController,
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ),
+          hintText: "Vergi No",
+          alignLabelWithHint: true,
+          labelText: "Vergi No"),
+    );
+  }
+
+  TextFormField adressField(BuildContext context) {
+    return TextFormField(
+      onChanged: (value) {},
+      onFieldSubmitted: (value) {
+        FocusScope.of(context).unfocus();
+      },
+      focusNode: adressFocus,
+      keyboardType: TextInputType.text,
+      maxLines: 6,
+      controller: adressController,
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ),
+          hintText: "Adres ",
+          alignLabelWithHint: true,
+          labelText: "Adres"),
     );
   }
 

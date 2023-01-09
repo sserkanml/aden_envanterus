@@ -12,7 +12,6 @@ import 'package:flutter_input_chips/flutter_input_chips.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:kartal/kartal.dart';
 import 'package:multi_image_picker_view/multi_image_picker_view.dart';
-import 'package:phone_form_field_plus/phone_form_field_plus.dart';
 
 class CreateProject extends StatefulWidget {
   const CreateProject({Key? key}) : super(key: key);
@@ -115,7 +114,6 @@ class _CreateProjectState extends State<CreateProject> {
                 SizedBox(
                   height: gap,
                 ),
-           
                 tagsChip(context),
                 SizedBox(
                   height: gap,
@@ -129,103 +127,100 @@ class _CreateProjectState extends State<CreateProject> {
 
   TextFormField projectNameField() {
     return TextFormField(
-                onChanged: (value) {
-                  postProjectChanged.projectName = value;
-                },
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) {
-                  if (value.isNotNullOrNoEmpty) {
-                    return null;
-                  } else {
-                    return "Bu alan boş geçilemez";
-                  }
-                },
-                onFieldSubmitted: (value) {},
-                decoration: const InputDecoration(
-                    labelText: "Proje Adı",
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 8.0,
-                    ),
-                    border: OutlineInputBorder()),
-              );
+      onChanged: (value) {
+        postProjectChanged.projectName = value;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: (value) {
+        if (value.isNotNullOrNoEmpty) {
+          return null;
+        } else {
+          return "Bu alan boş geçilemez";
+        }
+      },
+      onFieldSubmitted: (value) {},
+      decoration: const InputDecoration(
+          labelText: "Proje Adı",
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 8.0,
+          ),
+          border: OutlineInputBorder()),
+    );
   }
 
   Row saveRow(BuildContext context) {
     return Row(
-                children: [
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (CreateProjectForm.projectForm.currentState!
-                          .validate()) {
-                        CreateProjectForm.projectForm.currentState!.save();
-                      } else {}
-                    },
-                    child: Text(
-                      "Kaydet",
-                      style: context.textTheme.bodyMedium!
-                          .copyWith(color: Colors.white),
-                    ),
-                  ),
-                ],
-              );
+      children: [
+        const Spacer(),
+        ElevatedButton(
+          onPressed: () {
+            if (CreateProjectForm.projectForm.currentState!.validate()) {
+              CreateProjectForm.projectForm.currentState!.save();
+            } else {}
+          },
+          child: Text(
+            "Kaydet",
+            style: context.textTheme.bodyMedium!.copyWith(color: Colors.white),
+          ),
+        ),
+      ],
+    );
   }
 
   TextFormField noteField() {
     return TextFormField(
-                maxLines: 5,
-                onChanged: (value) {
-                  postProjectChanged.note = value;
-                },
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Not Yaz",
-                    alignLabelWithHint: true,
-                    labelText: "Not"),
-              );
+      maxLines: 5,
+      onChanged: (value) {
+        postProjectChanged.note = value;
+      },
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "Not Yaz",
+          alignLabelWithHint: true,
+          labelText: "Not"),
+    );
   }
 
   Future<bool?> closeDialog(BuildContext context) {
     return showDialog<bool>(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: Text(
-                      'Değişikleri Kaydet',
-                      style: context.textTheme.bodyMedium,
-                    ),
-                    content: Text(
-                      'Yaptığınız değişikler silinecektir',
-                      style: context.textTheme.bodyMedium,
-                    ),
-                    actions: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white),
-                        onPressed: () {
-                          Navigator.pop<bool>(context, false);
-                        },
-                        child: Text(
-                          "İptal Et",
-                          style: context.textTheme.bodyMedium!
-                              .copyWith(color: context.colorScheme.primary),
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop<bool>(context, true);
-                        },
-                        child: Text(
-                          "Çıkış Yap",
-                          style: context.textTheme.bodyMedium!
-                              .copyWith(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            'Değişikleri Kaydet',
+            style: context.textTheme.bodyMedium,
+          ),
+          content: Text(
+            'Yaptığınız değişikler silinecektir',
+            style: context.textTheme.bodyMedium,
+          ),
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+              onPressed: () {
+                Navigator.pop<bool>(context, false);
+              },
+              child: Text(
+                "İptal Et",
+                style: context.textTheme.bodyMedium!
+                    .copyWith(color: context.colorScheme.primary),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop<bool>(context, true);
+              },
+              child: Text(
+                "Çıkış Yap",
+                style:
+                    context.textTheme.bodyMedium!.copyWith(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   SizedBox pickImage(BuildContext context) {
@@ -234,7 +229,6 @@ class _CreateProjectState extends State<CreateProject> {
       width: context.dynamicWidth(1),
       child: MultiImagePickerView(
         onChange: (p0) {
-        
           postProjectChanged.imageFile = p0.firstOrNull;
         },
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -355,6 +349,8 @@ class _CreateProjectState extends State<CreateProject> {
 
   DropDownTextField dropDownMember() {
     return DropDownTextField(
+        listTextStyle:
+            context.textTheme.bodyMedium!.copyWith(color: Colors.black),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         textFieldDecoration: const InputDecoration(
             border: OutlineInputBorder(),
@@ -391,6 +387,8 @@ class _CreateProjectState extends State<CreateProject> {
 
   DropDownTextField dropdownCustomer() {
     return DropDownTextField(
+        listTextStyle:
+            context.textTheme.bodyMedium!.copyWith(color: Colors.black),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: customerDropDown,
         textFieldDecoration: const InputDecoration(
